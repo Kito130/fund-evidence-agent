@@ -1,0 +1,344 @@
+\documentclass[UTF8,fontset=windows,11pt,a4paper]{ctexart}
+\usepackage[margin=1.85cm,headheight=16pt]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{caption}
+
+\definecolor{navy}{HTML}{17324D}
+\definecolor{teal}{HTML}{0D7C75}
+\definecolor{gold}{HTML}{D69E2E}
+\definecolor{coral}{HTML}{D15C4A}
+\definecolor{slate}{HTML}{5B6B7A}
+\definecolor{paper}{HTML}{F7F5EF}
+\definecolor{line}{HTML}{D9E0E5}
+
+\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.25em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.65em,itemsep=0.25em,topsep=0.25em}
+\renewcommand{\arraystretch}{1.28}
+\captionsetup{font=small,labelfont={bf,color=navy}}
+
+\titleformat{\section}
+  {\Large\bfseries\color{navy}}
+  {\thesection}{0.7em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{teal}}
+  {\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\color{slate}\small 证据可追溯的公募基金研究平台}
+\rhead{\color{slate}\small F10 研究报告}
+\cfoot{\color{slate}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{line}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\callout}[1]{
+  \vspace{0.3em}
+  \colorbox{paper}{
+    \parbox{\dimexpr\linewidth-2\fboxsep}{
+      \color{navy}#1
+    }
+  }
+  \vspace{0.3em}
+}
+
+\begin{document}
+
+\begin{titlepage}
+  \pagecolor{paper}
+  \vspace*{1.1cm}
+  {\color{teal}\rule{\linewidth}{2.2pt}}
+  \vspace{1.1cm}
+
+  {\Huge\bfseries\color{navy}
+    证据可追溯的公募基金\\[0.22em]
+    研究与组合诊断平台
+  }
+
+  \vspace{0.75cm}
+  {\Large\color{slate}
+    离线 TF-IDF 检索、物理页 citation、模板化 Memo 与保守拒答
+  }
+
+  \vspace{1.35cm}
+  \begin{tabularx}{\linewidth}{>{\bfseries\color{navy}}p{3.6cm} X}
+    研究范围 & 3 只基金，2025Q3--2026Q2，12 份官方季度报告 \\
+    净值窗口 & 2024-07-24 至 2026-07-24，485 个共同实际观察日 \\
+    文档语料 & 175 个物理页，223 个单页 chunk \\
+    检索基线 & 中文字符 2--4 gram TF-IDF + 余弦相似度 \\
+    评测协议 & 10 个开发题 + 5 个一次性保留题 \\
+    运行边界 & 本地、无外部 LLM、无 API Key、不部署 \\
+  \end{tabularx}
+
+  \vfill
+  {\color{slate}\small
+    系统准确名称：可追溯文档检索与模板化投研 Memo 系统\\
+    报告日期：2026-07-27\\
+    本报告仅供研究与工程展示，不构成投资建议。
+  }
+  \vspace{0.6cm}
+  {\color{teal}\rule{\linewidth}{2.2pt}}
+\end{titlepage}
+\nopagecolor
+
+\section{执行摘要}
+
+本项目把基金净值与公开持仓诊断、官方季度报告检索、物理页级引用、模板化
+Memo 和证据不足拒答放进同一个离线系统。目标不是预测收益，而是验证一条研究事实
+能否从界面回溯到文档、页码、chunk 和哈希。
+
+\begin{itemize}
+  \item 共同净值窗口内，002980 的累计变化最高（154.43\%），同时年化波动也最高
+        （31.41\%）；003834 的最大回撤最深（-28.58\%）。
+  \item 三组非对角收益相关性位于 0.774--0.891，说明样本期内三只基金方向相关，
+        但路径和持仓披露仍有差异。
+  \item 003834 的 C10 始终较高（51.99\%--59.20\%）；这只说明公开前十大占 NAV
+        比例较高，不代表全部持仓高度集中。
+  \item 同报告期公开前十大 CommonNAVShare 的样本最大值为
+        16.55\%，出现在 2025Q4 的
+        003834 / 002980；该指标不能解释为完整持仓重合。
+  \item 冻结评测中开发题 10/10、保留题 5/5 端到端通过；保留题只运行一次，
+        看过结果后未调参。
+\end{itemize}
+
+\callout{\textbf{核心边界：}系统是离线 TF-IDF 检索与模板化 Memo，不是完整
+LLM RAG；评测题集小，15/15 不代表任意基金问题上的普遍准确率。}
+
+\clearpage
+\section{研究范围与证据链}
+
+\subsection{固定研究对象}
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{paper}{white}
+\begin{tabularx}{\linewidth}{p{2.2cm} X p{3.1cm}}
+\toprule
+\textbf{基金代码} & \textbf{基金名称} & \textbf{报告期} \\
+\midrule
+003567 & 华夏行业景气混合 A & 2025Q3--2026Q2 \\
+003834 & 华夏能源革新股票 A & 2025Q3--2026Q2 \\
+002980 & 华夏创新前沿股票 & 2025Q3--2026Q2 \\
+\bottomrule
+\end{tabularx}
+\caption{固定基金与季度报告范围}
+\end{table}
+
+\subsection{数据与文档处理}
+
+真实研究数据来自基金管理人官方产品页、历史净值页、公告页和季度报告 PDF。
+完整 PDF、完整提取文本、全量真实派生数据和原始响应只保存在本地忽略目录。
+
+\begin{enumerate}
+  \item 官方 PDF 按一基物理页提取，并清理重复页眉、页脚与断行。
+  \item 每个 chunk 只能属于一份文档和一个物理页，保存
+        \texttt{doc\_id}、\texttt{chunk\_id}、页码和 SHA-256。
+  \item F4 共处理 175 个物理页、105,426 个清理后字符，
+        形成 223 个单页 chunk。
+  \item F5 索引 223 个 chunk，字符 gram 词表规模为
+        38,033。
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{reports/figures/evidence_pipeline.png}
+\caption{离线检索、证据门槛与模板化 Memo 流程}
+\end{figure}
+
+\clearpage
+\section{净值与风险结果}
+
+净值侧固定使用累计净值；收益是相邻实际观测日的简单收益，不向周末、节假日或
+其他缺失日填充。波动采用样本标准差（\texttt{ddof=1}）乘
+$\sqrt{252}$，最大回撤保留非正符号。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{reports/figures/nav_indexed.png}
+\caption{三只基金共同窗口累计净值指数}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{paper}{white}
+\begin{tabularx}{\linewidth}{
+  p{1.6cm} X >{\raggedleft\arraybackslash}p{2.2cm}
+  >{\raggedleft\arraybackslash}p{2.1cm}
+  >{\raggedleft\arraybackslash}p{2.0cm}}
+\toprule
+\textbf{代码} & \textbf{基金} & \textbf{累计变化}
+& \textbf{年化波动} & \textbf{最大回撤} \\
+\midrule
+003567 & 华夏行业景气混合A & 130.93\% & 27.46\% & -23.17\% \\
+003834 & 华夏能源革新股票A & 38.41\% & 26.98\% & -28.58\% \\
+002980 & 华夏创新前沿股票 & 154.43\% & 31.41\% & -19.56\% \\
+\bottomrule
+\end{tabularx}
+\caption{共同窗口净值与风险摘要}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{reports/figures/drawdown.png}
+\caption{共同窗口回撤路径}
+\end{figure}
+
+\clearpage
+\section{相关性与公开持仓结构}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\linewidth]{reports/figures/correlation_heatmap.png}
+\caption{484 个相邻观测日简单收益的 Pearson 相关性}
+\end{figure}
+
+003567 与 002980 的相关性最高（0.891），003567 与 003834 为 0.774，
+003834 与 002980 为 0.778。相关性描述样本期同步程度，不表示因果关系或未来稳定性。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{reports/figures/holding_concentration.png}
+\caption{四个报告期的 C10 与 HHI10}
+\end{figure}
+
+C10 衡量公开前十大占基金 NAV 的比例；HHI10 先在十只披露持仓内部归一化再平方
+求和。因此，003834 的 C10 较高并不等同于其 HHI10 在每期都最高。
+
+\clearpage
+\section{同报告期公开前十大持仓重合}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{reports/figures/public_top10_overlap.png}
+\caption{三组基金在同报告期的 CommonNAVShare}
+\end{figure}
+
+跨基金比较严格限制在同一报告期。NameJaccard 使用披露名称精确交集除以并集；
+CommonNAVShare 按股票代码识别共同股票，并对每只共同股票取两只基金 NAV 权重的
+较小值后求和。
+
+\begin{itemize}
+  \item 003834 与 002980 在 2025Q4 的 CommonNAVShare 为 16.55\%，是样本最大值。
+  \item 003567 与 002980 在 2026Q2 的公开前十大没有共同股票。
+  \item 以上结论只覆盖公开前十大，不能写成完整持仓重合或组合穿透。
+\end{itemize}
+
+\clearpage
+\section{检索、Memo 与拒答}
+
+\subsection{检索基线}
+
+系统在用户先选择基金和报告期后，使用中文字符 2--4 gram TF-IDF 与余弦相似度
+检索。证据卡保留命中文本、分数、文档、物理页、chunk 和哈希。
+
+\subsection{双阈值证据门槛}
+
+回答必须同时满足最低最高分和最低查询 gram 覆盖率。门槛不足时，系统精确输出：
+
+\begin{quote}
+\color{coral}\bfseries 当前文档不足以回答该问题。
+\end{quote}
+
+通过门槛后，Memo 固定包含“已确认事实、原文证据、研究含义、当前无法确认的内容”
+四段。事实部分只放入命中证据的短摘录，不能自由生成未引用结论。
+
+\callout{\textbf{选择理由：}小语料下优先采用可解释、离线和稳定的检索基线。
+不使用 LangChain、FAISS、外部 embedding、OpenAI API、DeepSeek API 或本地大模型。}
+
+\clearpage
+\section{冻结评测}
+
+15 道题覆盖单文档事实、跨季度变化、跨基金比较和不可回答四类。10 个开发题用于
+迭代；5 个保留题在模型、阈值、题目、gold 页和评测器冻结后只执行一次。
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{paper}{white}
+\begin{tabular}{lrrrrrr}
+\toprule
+\textbf{切分} & \textbf{题数} & \textbf{端到端}
+& \textbf{Recall@5} & \textbf{MRR@5}
+& \textbf{引用支持} & \textbf{无支持主张率} \\
+\midrule
+开发题 & 10 & 10/10 & 1.00 & 1.00 & 1.00 & 0.00 \\
+保留题 & 5 & 5/5 & 1.00 & 1.00 & 1.00 & 0.00 \\
+\bottomrule
+\end{tabular}
+\caption{开发题与一次性保留题评测}
+\end{table}
+
+保留题锁记录 \texttt{status=COMPLETED}、\texttt{run\_count=1} 和
+\texttt{rerun\_forbidden=true}。开发题与保留题的 citation support、answer
+completeness 和拒答正确率均为 1.0，unsupported-claim rate 为 0。
+
+\callout{\textbf{解释限制：}这些结果证明冻结协议下的 15 个固定问题全部通过，
+不能解释为真实开放问题上的 100\% 准确率。}
+
+\clearpage
+\section{公开演示与安全边界}
+
+公开应用默认读取完全合成数据，任何克隆者无需网络或 API Key 即可运行净值、
+回撤、相关性、持仓诊断、检索、Memo 与拒答。
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{paper}{white}
+\begin{tabularx}{\linewidth}{p{3.1cm} p{1.8cm} X}
+\toprule
+\textbf{数据模式} & \textbf{默认} & \textbf{公开内容} \\
+\midrule
+\texttt{demo\_synthetic} & 是 &
+3 只虚构基金、4 个报告期、12 份合成文档和完整演示索引 \\
+\texttt{sample\_real} & 否 &
+3 只真实基金、2 个报告期、6 条不超过 110 字的必要短摘录及来源页码 \\
+\texttt{local\_full} & 否 &
+维护者本地完整研究；PDF、正文、全量派生表和响应均不进入 Git \\
+\bottomrule
+\end{tabularx}
+\caption{应用数据模式}
+\end{table}
+
+Git 候选内容审计排除 Token、凭证、完整源 PDF、私有缓存、环境变量和长篇原文。
+研究报告 PDF 可以公开，但 12 份官方源报告不能进入版本控制。
+
+\clearpage
+\section{局限、负结果与结论}
+
+\subsection{关键局限}
+
+\begin{itemize}
+  \item 只有 3 只同一管理人旗下基金，报告和评测样本都较小。
+  \item 官方报告存在模板变化；未披露行业项保留为空，不用零填充。
+  \item TF-IDF 是词面检索，可能拒绝语义相关但用词不同的问题。
+  \item 小型真实样例不提供完整上下文；正式研究必须返回官方报告核验。
+  \item 系统不提供实时风控、交易信号、回测、组合优化或收益预测。
+\end{itemize}
+
+\subsection{结论}
+
+本项目完成了从官方数据审计、结构化指标、单页 chunk、可解释检索、物理页 citation、
+保守拒答、冻结评测到公开离线演示的完整链路。最重要的产出不是某个模型分数，而是
+每个数字、引用和简历表述都有明确的结果文件、脚本、配置和数据版本。
+
+\vfill
+{\small\color{slate}
+复现入口：\texttt{python scripts/run\_pipeline.py}\\
+本地界面：\texttt{streamlit run app.py}\\
+简历证据：\texttt{reports/resume\_evidence\_map.md}\\
+完整局限：\texttt{reports/limitations.md}
+}
+
+\end{document}

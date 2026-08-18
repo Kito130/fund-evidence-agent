@@ -1,0 +1,55 @@
+name: Fund evidence agent public checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fund-agent-public-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  public:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install project and test dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+      - name: Compile public source
+        run: python -m compileall -q src scripts tests
+      - name: Synthetic end-to-end demo
+        run: python scripts/run_pipeline.py --profile demo_synthetic
+      - name: Public tests
+        run: python -m pytest -q -p no:cacheprovider
+      - name: Validate Compose configuration
+        run: docker compose config --quiet
+      - name: Build and smoke-test Docker image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build --tag fund-evidence-agent-ci .
+          docker run --detach --rm --name fund-evidence-agent-ci \
+            --publish 127.0.0.1:18000:8000 \
+            --env FUND_AGENT_MODE=MOCK_ONLY \
+            fund-evidence-agent-ci
+          cleanup() { docker rm --force fund-evidence-agent-ci >/dev/null 2>&1 || true; }
+          trap cleanup EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:18000/health/ready >/dev/null; then
+              curl --fail --silent http://127.0.0.1:18000/metrics >/dev/null
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs fund-evidence-agent-ci
+          exit 1

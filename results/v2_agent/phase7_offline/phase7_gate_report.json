@@ -1,0 +1,139 @@
+{
+  "check_count": 26,
+  "checks": [
+    {
+      "check": "阶段、单 Agent 与离线模式冻结",
+      "evidence": "SINGLE_AGENT / MOCK_ONLY",
+      "passed": true
+    },
+    {
+      "check": "OpenAI 官方文档 Gate",
+      "evidence": "official OpenAI sources frozen on 2026-08-04",
+      "passed": true
+    },
+    {
+      "check": "Agents SDK 十个 strict 工具",
+      "evidence": "tools=10, additionalProperties=false",
+      "passed": true
+    },
+    {
+      "check": "在线候选模型参数冻结",
+      "evidence": "gpt-5.6-terra / medium / store=false / serial tools",
+      "passed": true
+    },
+    {
+      "check": "SDK 外部 tracing 关闭",
+      "evidence": "tracing_disabled=true, sensitive_data=false",
+      "passed": true
+    },
+    {
+      "check": "真实 API 双重授权预检",
+      "evidence": "explicit_authorization=false is blocked before any request",
+      "passed": true
+    },
+    {
+      "check": "全新 V2 评测集完整",
+      "evidence": "cases=32, suites=7",
+      "passed": true
+    },
+    {
+      "check": "评测结果清单完整",
+      "evidence": "results=32",
+      "passed": true
+    },
+    {
+      "check": "离线确定性总通过率",
+      "evidence": "32/32",
+      "passed": true
+    },
+    {
+      "check": "状态正确率",
+      "evidence": "32/32",
+      "passed": true
+    },
+    {
+      "check": "工具路由",
+      "evidence": "32/32",
+      "passed": true
+    },
+    {
+      "check": "基金与报告期参数",
+      "evidence": "32/32",
+      "passed": true
+    },
+    {
+      "check": "结论与拒答原因",
+      "evidence": "32/32",
+      "passed": true
+    },
+    {
+      "check": "数字声明回算",
+      "evidence": "numeric_consistency=4/4",
+      "passed": true
+    },
+    {
+      "check": "引用与原文定位",
+      "evidence": "citation_integrity=4/4",
+      "passed": true
+    },
+    {
+      "check": "危险请求工具前拒答",
+      "evidence": "refusal=5/5, tool_steps=0",
+      "passed": true
+    },
+    {
+      "check": "Prompt Injection 工具前阻断",
+      "evidence": "prompt_injection=5/5, tool_steps=0",
+      "passed": true
+    },
+    {
+      "check": "工具步数与延迟预算",
+      "evidence": "max_steps=3, max_latency_ms=11.984",
+      "passed": true
+    },
+    {
+      "check": "模型、网络、Token 与成本为零",
+      "evidence": "model=0, network=0, tokens=0, cost=0",
+      "passed": true
+    },
+    {
+      "check": "本地 trace 脱敏",
+      "evidence": "traces=32",
+      "passed": true
+    },
+    {
+      "check": "Phase 6 Manifest 与全部冻结输入未漂移",
+      "evidence": "protected_files=26",
+      "passed": true
+    },
+    {
+      "check": "Phase 7 冻结输入、源码与产物哈希",
+      "evidence": "inputs=12, sources=14, outputs=4",
+      "passed": true
+    },
+    {
+      "check": "旧评测与 final holdout 边界",
+      "evidence": "old_dev=0, old_holdout=0, new_holdout=NOT_CREATED",
+      "passed": true
+    },
+    {
+      "check": "正式导出保持人工审批暂停",
+      "evidence": "formal_export_count=0",
+      "passed": true
+    },
+    {
+      "check": "中文报告与 mock 限制披露",
+      "evidence": "reports/phase7_offline_evaluation.md",
+      "passed": true
+    },
+    {
+      "check": "离线入口不执行 Agents Runner",
+      "evidence": "SDK adapter constructs contracts only; no online runner call",
+      "passed": true
+    }
+  ],
+  "online_evaluation_status": "NOT_RUN_REQUIRES_EXPLICIT_AUTHORIZATION",
+  "passed_count": 26,
+  "phase": "PHASE_7_OFFLINE",
+  "status": "PASS"
+}

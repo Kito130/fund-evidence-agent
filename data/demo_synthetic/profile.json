@@ -1,0 +1,18 @@
+{
+  "api_key_required": false,
+  "contains_complete_pdf": false,
+  "contains_real_fund_data": false,
+  "counts": {
+    "funds": 3,
+    "holding_rows": 120,
+    "industry_rows": 60,
+    "nav_rows": 240,
+    "periods": 4,
+    "reports": 12,
+    "short_text_rows": 12
+  },
+  "dataset_version": "f9_synthetic_v1",
+  "network_required": false,
+  "profile": "demo_synthetic",
+  "source_policy": "fully_synthetic_reserved_domain"
+}

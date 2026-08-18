@@ -1,0 +1,44 @@
+{
+  "config": {
+    "configs/phase6_tools.yaml": "aca96bb741d9e72d85b09385a98547cbd60f8364aac70ce8f1aadaead224f7a0"
+  },
+  "llm_call_count": 0,
+  "network_request_count": 0,
+  "old_holdout_policy": "FROZEN_DO_NOT_READ",
+  "old_holdout_read_count": 0,
+  "outputs": {
+    "reports/phase6_tools_report.md": "706ae3865890a35fb3d2d47bd78e9c85b424af773e2d1d294dbdc4ad98d075b2",
+    "results/v2_agent/phase6/audit_events.jsonl": "21d083d30a8e6f2d25f05c48681d75dc3c04ffe73e6f3b9d0b3273a27ae734d4",
+    "results/v2_agent/phase6/smoke_results.json": "d09cf3afac23ded82d805726f60133472542ed8a6b05dc3266e3b0f28d07d811",
+    "results/v2_agent/phase6/tool_contracts.json": "d243655442e3a2c46cddab9a44394dd568835fb69f8a853b0372678640ac9d5a"
+  },
+  "phase": "PHASE_6",
+  "protected_core_files_modified": false,
+  "protected_v1": {
+    "src/memo.py": "16e0840613c14e95038e7fad1fbb4da22f0d361ba8d4d1e9c9af4a30dc984be2",
+    "src/metrics.py": "3d356d450bf3ba28ddc9395e65f4adc15d0964c10c5eedfae9642feeaa619b19",
+    "src/retrieval.py": "96219315e3131117e667225ca270e46b5d0f2cbb512958b9ca8f863df0dd4fdf"
+  },
+  "registered_data": {
+    "data/demo_synthetic/chunks.jsonl": "27b744e7e6400801676907347d0cb19c9de2c676049e0d822a20d8037cc4f974",
+    "data/demo_synthetic/nav_daily.csv": "d248e9978b5ed51300f840492f8504eda1cd875939265c6fd604c0a41e36f375",
+    "data/demo_synthetic/profile.json": "d017129f6cc8d8886569ff03a5ab031a5595529faa52026cf8c04971bf6c52d9",
+    "data/demo_synthetic/source_manifest.csv": "25e00ef54b9a6fe81bdab41281058fbaf42c91a43ba4225852ec870c743352a1",
+    "data/demo_synthetic/tfidf_index.json": "9b9108d9497f8adbc10cc62969863a36da67901f94763b8fee434aa343324e88",
+    "data/demo_synthetic/top10_holdings.csv": "5f4b27a1cc098cf9f3eecf87740574f6ca332357a8f160107deaa42c776c86da"
+  },
+  "source_hashes": {
+    "scripts/run_phase6.py": "7e374633e4b8aa3349e9370bd4dbc77258b9c3876802980595f2baa0ab3f3d6d",
+    "scripts/run_phase6_gate.py": "cfbfb489c93edea9b0ab9d006f2cca232563e842f617c11a0ce6df719b7620b1",
+    "src/fund_agent_v2/audit.py": "68c06eaea117f072f3a559b7b401418993e7d0948f4b7a1a714d39dec3bf15e9",
+    "src/fund_agent_v2/calculations.py": "86fefd9bfa94c2dcc2bf1be85c02c754dc87dccfbb2edcde013003665e09c413",
+    "src/fund_agent_v2/errors.py": "e070712f9fa5c4a5a33e6979ffcb7ded03743335983e69516ff6a1bdc72d8189",
+    "src/fund_agent_v2/phase6.py": "fd0b312398da22cbfc56cf9412a977f8cde58a4bda61185cbbc214fbf091dcc6",
+    "src/fund_agent_v2/phase6_gate.py": "eef7a1d7feee8973d1329e5ab04d39087cecd36265cd1f9a8454957aea4ed78e",
+    "src/fund_agent_v2/policy.py": "80b4bc779b56cc27086dfa61bae453a23773519e4f2cacf3b046340bd11cec3a",
+    "src/fund_agent_v2/repository.py": "b21cae2e751456a52d2491f37366b307e9ccc32af9edb5951c29f9d9ededc2a6",
+    "src/fund_agent_v2/retrieval_engine.py": "de33193dc630ac65229be3945a4923e57c464a088861df4b72fc15c9a4ff8a98",
+    "src/fund_agent_v2/schemas.py": "584e43de35b885482b959d700b92abe15e9775e1da6b2344858ba98c97ac7189",
+    "src/fund_agent_v2/tools.py": "d9d373c8d1d9ad620ca4fff7f04d8141101ac085fcf22bfb22e7cf3a0f6b32d5"
+  }
+}

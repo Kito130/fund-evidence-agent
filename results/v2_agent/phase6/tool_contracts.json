@@ -1,0 +1,52 @@
+{
+  "build_evidence_table": {
+    "input_schema": "BuildEvidenceTableInput",
+    "output_schema": "EvidenceTableOutput",
+    "timeout_seconds": 2.0
+  },
+  "calculate_nav_metrics": {
+    "input_schema": "CalculateNavMetricsInput",
+    "output_schema": "NavMetricsOutput",
+    "timeout_seconds": 2.0
+  },
+  "compare_funds": {
+    "input_schema": "CompareFundsInput",
+    "output_schema": "FundComparisonOutput",
+    "timeout_seconds": 2.0
+  },
+  "compare_holdings": {
+    "input_schema": "CompareHoldingsInput",
+    "output_schema": "HoldingsComparisonOutput",
+    "timeout_seconds": 2.0
+  },
+  "export_research_memo": {
+    "input_schema": "ExportResearchMemoInput",
+    "output_schema": "ExportResearchMemoOutput",
+    "timeout_seconds": 2.0
+  },
+  "fetch_official_source": {
+    "input_schema": "FetchOfficialSourceInput",
+    "output_schema": "OfficialSourceOutput",
+    "timeout_seconds": 2.0
+  },
+  "load_fund_profile": {
+    "input_schema": "LoadFundProfileInput",
+    "output_schema": "FundProfileOutput",
+    "timeout_seconds": 2.0
+  },
+  "retrieve_report_evidence": {
+    "input_schema": "RetrieveReportEvidenceInput",
+    "output_schema": "RetrievalOutput",
+    "timeout_seconds": 2.0
+  },
+  "validate_numeric_claims": {
+    "input_schema": "ValidateNumericClaimsInput",
+    "output_schema": "NumericValidationOutput",
+    "timeout_seconds": 2.0
+  },
+  "verify_citations": {
+    "input_schema": "VerifyCitationsInput",
+    "output_schema": "CitationVerificationOutput",
+    "timeout_seconds": 2.0
+  }
+}

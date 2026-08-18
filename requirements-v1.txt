@@ -1,0 +1,7 @@
+PyMuPDF>=1.24,<2
+pypdf>=6,<7
+pdfplumber>=0.11,<1
+pandas>=2.2,<4
+streamlit>=1.40,<2
+Pillow>=10,<13
+reportlab>=4,<5

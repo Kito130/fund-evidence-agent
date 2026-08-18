@@ -1,0 +1,194 @@
+{
+  "audit": {
+    "event_count": 10,
+    "expected_error_count": 1,
+    "success_count": 9
+  },
+  "citation": {
+    "all_valid": true,
+    "checks": [
+      {
+        "checks": {
+          "announcement_url": true,
+          "chunk_registered": true,
+          "doc_id": true,
+          "file_url": true,
+          "fund_code": true,
+          "fund_name": true,
+          "manifest": true,
+          "page_text_hash": true,
+          "period": true,
+          "period_end": true,
+          "physical_page": true,
+          "source_pdf_sha256": true,
+          "text_hash": true
+        },
+        "chunk_id": "SYN001_2026Q1_p001_c001",
+        "reason_codes": [
+          "verified"
+        ],
+        "valid": true
+      }
+    ]
+  },
+  "comparison": {
+    "cumulative_change_difference_a_minus_b": -0.013534038461538556,
+    "fund_code_a": "SYN002",
+    "fund_code_b": "SYN001",
+    "period": "2026Q2"
+  },
+  "evidence": {
+    "all_located": true,
+    "rows": [
+      {
+        "chunk_id": "SYN001_2026Q1_p001_c001",
+        "citation_valid": true,
+        "claim_id": "p6-evidence-1",
+        "claim_text": "合成报告提及市场震荡和分散配置。",
+        "evidence_excerpt": "稳健成长合成基金在202",
+        "exact_excerpt": true,
+        "limitation": "location_and_exact_excerpt_only_not_semantic_entailment",
+        "physical_page": 1,
+        "status": "LOCATED"
+      }
+    ]
+  },
+  "export_denial": "APPROVAL_REQUIRED",
+  "holdings": {
+    "common_nav_share": 0.133,
+    "common_stock_codes": [
+      "S00008",
+      "S00009",
+      "S00010",
+      "S00011",
+      "S00012"
+    ],
+    "common_stock_count": 5,
+    "fund_a": {
+      "c10": 0.348,
+      "disclosed_holding_count": 10,
+      "fund_code": "SYN002",
+      "fund_name": "科技创新合成基金",
+      "hhi10": 0.10779165015193552
+    },
+    "fund_b": {
+      "c10": 0.348,
+      "disclosed_holding_count": 10,
+      "fund_code": "SYN001",
+      "fund_name": "稳健成长合成基金",
+      "hhi10": 0.10779165015193552
+    },
+    "name_jaccard": 0.3333333333333333,
+    "period": "2026Q1",
+    "terminology": "公开前十大持仓重合"
+  },
+  "llm_call_count": 0,
+  "nav": {
+    "common_end_date": "2026-04-24",
+    "common_observations": 80,
+    "common_start_date": "2026-01-05",
+    "metrics": [
+      {
+        "annualized_volatility": 0.06102883970948941,
+        "cumulative_change": 0.09426000000000001,
+        "drawdown_peak_date": "2026-01-27",
+        "drawdown_recovery_date": "2026-04-17",
+        "drawdown_trough_date": "2026-03-30",
+        "end_date": "2026-04-24",
+        "fund_code": "SYN001",
+        "fund_name": "稳健成长合成基金",
+        "max_drawdown": -0.0661248436155164,
+        "nav_observations": 80,
+        "return_observations": 79,
+        "start_date": "2026-01-05"
+      },
+      {
+        "annualized_volatility": 0.06083486177872739,
+        "cumulative_change": 0.08072596153846145,
+        "drawdown_peak_date": "2026-01-22",
+        "drawdown_recovery_date": "2026-04-15",
+        "drawdown_trough_date": "2026-03-25",
+        "end_date": "2026-04-24",
+        "fund_code": "SYN002",
+        "fund_name": "科技创新合成基金",
+        "max_drawdown": -0.06808947397377396,
+        "nav_observations": 80,
+        "return_observations": 79,
+        "start_date": "2026-01-05"
+      },
+      {
+        "annualized_volatility": 0.059496786202876774,
+        "cumulative_change": 0.05497592592592593,
+        "drawdown_peak_date": "2026-01-20",
+        "drawdown_recovery_date": "2026-04-13",
+        "drawdown_trough_date": "2026-03-23",
+        "end_date": "2026-04-24",
+        "fund_code": "SYN003",
+        "fund_name": "绿色转型合成基金",
+        "max_drawdown": -0.06900364152306881,
+        "nav_observations": 80,
+        "return_observations": 79,
+        "start_date": "2026-01-05"
+      }
+    ]
+  },
+  "network_request_count": 0,
+  "numeric": {
+    "all_valid": true,
+    "checks": [
+      {
+        "absolute_difference": 0.0,
+        "claim_id": "p6-number-1",
+        "claimed_value": 0.09426000000000001,
+        "expected_value": 0.09426000000000001,
+        "metric": "cumulative_change",
+        "reason_code": "verified",
+        "valid": true
+      },
+      {
+        "absolute_difference": 0.0,
+        "claim_id": "p6-number-2",
+        "claimed_value": 0.133,
+        "expected_value": 0.133,
+        "metric": "common_nav_share",
+        "reason_code": "verified",
+        "valid": true
+      }
+    ]
+  },
+  "official_source": {
+    "cache_mode": "LOCAL_MANIFEST_ONLY",
+    "doc_id": "SYN001_2026Q1",
+    "domain": "example.invalid",
+    "fund_code": "SYN001",
+    "network_request_count": 0,
+    "period": "2026Q1",
+    "source_kind": "announcement",
+    "source_pdf_sha256": "7d644bbff9c37e3a9841b5b8fbe2f46a4ca9d3bfda529915edff53cc80b47f15",
+    "untrusted_content": true,
+    "url": "https://example.invalid/synthetic/SYN001_2026Q1"
+  },
+  "old_holdout_read_count": 0,
+  "phase": "PHASE_6",
+  "profile": {
+    "dataset_version": "f9_synthetic_v1",
+    "fund_codes": [
+      "SYN001",
+      "SYN002",
+      "SYN003"
+    ],
+    "periods": [
+      "2025Q3",
+      "2025Q4",
+      "2026Q1",
+      "2026Q2"
+    ]
+  },
+  "retrieval": {
+    "model_version": "f5_char_ngram_tfidf_v1",
+    "result_count": 1,
+    "top_chunk_id": "SYN001_2026Q1_p001_c001",
+    "top_score": 0.15008237915789335,
+    "untrusted_content": true
+  }
+}

@@ -1,0 +1,51 @@
+schema_version: 1
+project_id: fund_agent
+phase: PHASE_7
+random_seed: 20260804
+execution_mode: MOCK_ONLY
+online_api_status: BLOCKED_MISSING_EXPLICIT_AUTHORIZATION_AND_KEY
+old_holdout_policy: FROZEN_DO_NOT_READ
+new_holdout_status: NOT_CREATED
+agent_architecture: SINGLE_AGENT
+api_family: RESPONSES_API
+sdk: openai-agents
+sdk_version: 0.19.3
+openai_version: 2.53.0
+model: gpt-5.6-terra
+reasoning_effort: medium
+text_verbosity: medium
+store: false
+parallel_tool_calls: false
+sdk_tracing_enabled: false
+sdk_trace_include_sensitive_data: false
+local_redacted_trace_enabled: true
+max_tool_steps: 6
+max_consecutive_tool_failures: 2
+max_input_chars: 1000
+max_output_chars: 4000
+max_output_tokens: 5000
+minimum_evidence_score: 0.31
+max_cost_usd: 1.0
+request_timeout_seconds: 30.0
+export_enabled: false
+allowed_fund_codes:
+  - "SYN001"
+  - "SYN002"
+  - "SYN003"
+allowed_periods:
+  - 2025Q3
+  - 2025Q4
+  - 2026Q1
+  - 2026Q2
+evaluation_sets:
+  development: eval/v2/development.jsonl
+  adversarial: eval/v2/adversarial.jsonl
+  tool_selection: eval/v2/tool_selection.jsonl
+  numeric_consistency: eval/v2/numeric_consistency.jsonl
+  citation_integrity: eval/v2/citation_integrity.jsonl
+  refusal: eval/v2/refusal.jsonl
+  prompt_injection: eval/v2/prompt_injection.jsonl
+outputs:
+  root: results/v2_agent/phase7_offline
+  report: reports/phase7_offline_evaluation.md
+  gate_report: reports/phase7_offline_gate_report.md

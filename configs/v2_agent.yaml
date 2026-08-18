@@ -1,0 +1,27 @@
+schema_version: 1
+project_id: fund_agent
+phase: PHASE_1
+random_seed: 20260803
+data_registry_path: ../data_registry.yaml
+execution_enabled: false
+llm_enabled: false
+network_enabled: false
+paid_api_enabled: false
+export_enabled: false
+data_write_policy: V2_OUTPUTS_ONLY
+api_gate_status: PENDING_OFFICIAL_DOCS_VERIFICATION
+agent_architecture: SINGLE_AGENT_BASELINE_FIRST
+old_holdout_policy: FROZEN_DO_NOT_READ
+tool_policy:
+  arbitrary_shell_allowed: false
+  arbitrary_filesystem_allowed: false
+  allowlist_required: true
+  strict_schemas_required: true
+retrieval_sequence:
+  - TFIDF_BASELINE
+  - BM25_CANDIDATE
+  - EMBEDDING_CANDIDATE
+  - HYBRID_CANDIDATE
+  - OPTIONAL_RERANKER
+output_root: results/v2_agent
+

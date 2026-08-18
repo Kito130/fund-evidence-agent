@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fund-evidence-agent"
+version = "0.1.0"
+requires-python = ">=3.11,<3.15"
+dependencies = [
+  "PyYAML>=6,<7",
+  "pandas>=2.2,<4",
+  "pydantic>=2.12,<3",
+  "fastapi>=0.140,<1",
+  "uvicorn>=0.40,<1",
+]
+
+[project.optional-dependencies]
+online = [
+  "openai==2.53.0",
+  "openai-agents==0.19.3",
+]
+reports = [
+  "PyMuPDF>=1.24,<2",
+  "pypdf>=6,<7",
+  "pdfplumber>=0.11,<1",
+  "Pillow>=10,<13",
+  "reportlab>=4,<5",
+]
+ui = [
+  "streamlit>=1.40,<2",
+]
+dev = [
+  "httpx>=0.28,<1",
+  "openai==2.53.0",
+  "openai-agents==0.19.3",
+  "pytest>=9,<10",
+  "ruff>=0.15,<1",
+  "mypy>=1.19,<2",
+  "types-PyYAML>=6.0,<7",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+  "local_data: requires the bundled local synthetic dataset and no network access",
+  "local_artifact: requires frozen generated research artifacts",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true

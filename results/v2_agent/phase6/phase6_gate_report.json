@@ -1,0 +1,108 @@
+{
+  "check_count": 20,
+  "checks": [
+    {
+      "check": "阶段与旧 Holdout 边界",
+      "evidence": "old_holdout_read_count=0",
+      "passed": true
+    },
+    {
+      "check": "LLM、网络与付费 API 关闭",
+      "evidence": "llm=0, network=0, paid_api=0",
+      "passed": true
+    },
+    {
+      "check": "十个工具完整注册",
+      "evidence": "tools=10",
+      "passed": true
+    },
+    {
+      "check": "严格输入输出 Schema",
+      "evidence": "10 inputs + 10 outputs",
+      "passed": true
+    },
+    {
+      "check": "无任意文件、命令或密钥参数",
+      "evidence": "forbidden_fields=[]",
+      "passed": true
+    },
+    {
+      "check": "核心算法与注册数据哈希",
+      "evidence": "all protected inputs match",
+      "passed": true
+    },
+    {
+      "check": "Phase 6 产物哈希",
+      "evidence": "outputs=4",
+      "passed": true
+    },
+    {
+      "check": "Phase 6 源码哈希",
+      "evidence": "sources=12",
+      "passed": true
+    },
+    {
+      "check": "无网络与 Shell 实现能力",
+      "evidence": "forbidden_imports=[], forbidden_calls=False",
+      "passed": true
+    },
+    {
+      "check": "NAV 数值一致性",
+      "evidence": "80 common observations",
+      "passed": true
+    },
+    {
+      "check": "持仓数值一致性",
+      "evidence": "Jaccard=1/3, CommonNAVShare=0.133",
+      "passed": true
+    },
+    {
+      "check": "离线检索范围与不可信标记",
+      "evidence": "top_chunk=SYN001_2026Q1_p001_c001",
+      "passed": true
+    },
+    {
+      "check": "官方来源仅本地 Manifest",
+      "evidence": "example.invalid",
+      "passed": true
+    },
+    {
+      "check": "引用完整性",
+      "evidence": "checks=13",
+      "passed": true
+    },
+    {
+      "check": "证据表精确定位",
+      "evidence": "exact excerpts only",
+      "passed": true
+    },
+    {
+      "check": "数字声明回查",
+      "evidence": "2/2 verified",
+      "passed": true
+    },
+    {
+      "check": "Prompt Injection 识别",
+      "evidence": "ignore_instructions, secret_exfiltration, tool_escalation",
+      "passed": true
+    },
+    {
+      "check": "人工审批导出 Gate",
+      "evidence": "unapproved export rejected",
+      "passed": true
+    },
+    {
+      "check": "十工具脱敏审计",
+      "evidence": "10 events, hashes only",
+      "passed": true
+    },
+    {
+      "check": "中文报告与限制披露",
+      "evidence": "reports/phase6_tools_report.md",
+      "passed": true
+    }
+  ],
+  "passed_count": 20,
+  "phase": "PHASE_6",
+  "status": "PASS"
+}

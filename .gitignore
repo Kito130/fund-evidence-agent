@@ -1,0 +1,48 @@
+# Python and local environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+local_secrets.py
+**/local_secrets.py
+credentials.json
+*credentials*.json
+secrets.*
+*.key
+*.pem
+
+# Public data allowlist
+data/*
+!data/README.md
+!data/demo_synthetic/
+!data/demo_synthetic/**
+!data/sample_public/
+!data/sample_public/**
+
+# Private and generated artifacts
+data/private_pdf/
+data/raw/
+data/processed/
+data/curated/
+indexes/
+traces/
+tmp/
+logs/
+*.log
+*.part
+*.tmp
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

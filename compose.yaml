@@ -1,0 +1,23 @@
+services:
+  fund-agent:
+    build:
+      context: .
+    image: quant-fund-agent:v2
+    environment:
+      FUND_AGENT_MODE: MOCK_ONLY
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    volumes:
+      - type: bind
+        source: ./data/demo_synthetic
+        target: /app/data/demo_synthetic
+        read_only: true
+    restart: unless-stopped

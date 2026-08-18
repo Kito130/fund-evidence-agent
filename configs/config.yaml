@@ -1,0 +1,216 @@
+project:
+  name: traceable_fund_research
+  stage: F10
+  source_domain_allowlist:
+    - accountquery.chinaamc.com
+    - www.chinaamc.com
+    - fund.chinaamc.com
+
+funds:
+  - code: "003567"
+    name: 华夏行业景气混合A
+  - code: "003834"
+    name: 华夏能源革新股票A
+  - code: "002980"
+    name: 华夏创新前沿股票
+
+periods:
+  - id: 2025Q3
+    period_end: "2025-09-30"
+    schema_version: pre_2026_05
+  - id: 2025Q4
+    period_end: "2025-12-31"
+    schema_version: pre_2026_05
+  - id: 2026Q1
+    period_end: "2026-03-31"
+    schema_version: pre_2026_05
+  - id: 2026Q2
+    period_end: "2026-06-30"
+    schema_version: amac_2026_05
+
+paths:
+  source_manifest: data/source_manifest.csv
+  private_pdf: data/private_pdf
+  curated: data/curated
+  processed: data/processed
+  manager_views: data/curated/manager_views.csv
+  industry_allocation: data/curated/industry_allocation.csv
+  public_top10_holdings: data/curated/top10_holdings.csv
+  nav_daily: data/curated/nav_daily.csv
+  nav_source_manifest: data/nav_source_manifest.csv
+  nav_basis_review: data/nav_basis_review.csv
+  nav_returns: data/processed/nav_returns.csv
+  nav_metrics: data/processed/nav_metrics.csv
+  return_correlation: data/processed/return_correlation.csv
+  holding_metrics: data/processed/holding_metrics.csv
+  public_top10_overlap: data/processed/public_top10_overlap.csv
+  metrics_json: results/metrics.json
+  f3_metrics_audit: results/f3_metrics_audit.json
+  f3_manual_checks: results/f3_manual_checks.csv
+  f3_run_manifest: results/f3_run_manifest.json
+  f3_audit: results/f3_audit.json
+  parsed_documents: data/processed/documents.csv
+  parsed_pages: data/processed/pages.jsonl
+  parsed_chunks: data/processed/chunks.jsonl
+  f4_document_audit: results/f4_document_audit.csv
+  f4_run_manifest: results/f4_run_manifest.json
+  f4_audit: results/f4_audit.json
+  tfidf_index: data/processed/tfidf_index.json
+  f5_evidence_cards: data/processed/f5_evidence_cards.jsonl
+  f5_query_audit: results/f5_query_audit.csv
+  f5_run_manifest: results/f5_run_manifest.json
+  f5_audit: results/f5_audit.json
+  f6_memos: data/processed/f6_memos.jsonl
+  f6_case_audit: results/f6_case_audit.csv
+  f6_run_manifest: results/f6_run_manifest.json
+  f6_audit: results/f6_audit.json
+  f7_development_questions: eval/development_questions.jsonl
+  f7_holdout_questions: eval/holdout_questions.jsonl
+  f7_gold_pages: eval/gold_pages.jsonl
+  f7_development_results: results/f7_development_results.csv
+  f7_development_metrics: results/f7_development_metrics.json
+  f7_holdout_results: results/f7_holdout_results.csv
+  f7_holdout_metrics: results/f7_holdout_metrics.json
+  f7_freeze_manifest: results/f7_freeze_manifest.json
+  f7_holdout_lock: results/f7_holdout_lock.json
+  f7_run_manifest: results/f7_run_manifest.json
+  f7_audit: results/f7_audit.json
+  f8_app: app.py
+  f8_audit: results/f8_audit.json
+  f8_run_manifest: results/f8_run_manifest.json
+  f9_demo_synthetic: data/demo_synthetic
+  f9_sample_real: data/sample_real
+  f9_audit: results/f9_audit.json
+  f9_run_manifest: results/f9_run_manifest.json
+  f10_metrics: results/f10_metrics.json
+  f10_report_tex: reports/research_report.tex
+  f10_report_pdf: reports/research_report.pdf
+  f10_visual_qa: results/f10_visual_qa.json
+  f10_audit: results/f10_audit.json
+  f10_run_manifest: results/f10_run_manifest.json
+
+nav:
+  official_asset_url_template: https://fund.chinaamc.com/fund/{code}/zoust_all.js
+  official_history_url: https://fund.chinaamc.com/product/fundLishijingzhi.do
+  window_rule: latest_24_calendar_months_common_dates
+  minimum_common_dates: 400
+  fields:
+    - date
+    - unit_nav
+    - cumulative_nav
+
+metrics:
+  nav_field: cumulative_nav
+  return_type: simple_observation_to_observation
+  calendar_fill: false
+  annualization_factor: 252
+  volatility_ddof: 1
+  max_drawdown_sign: non_positive
+  public_top10:
+    comparison_period_rule: same_report_period_only
+    terminology: 公开前十大持仓重合
+
+pdf_parsing:
+  library: PyMuPDF
+  parser_version: f4_pymupdf_v1
+  page_number_basis: one_based_physical_pdf_page
+  remove_repeated_headers_and_footers: true
+  chunk_scope: single_physical_page_single_document
+  recommended_minimum_chunk_chars: 400
+  maximum_chunk_chars: 800
+  overlap_chars: 60
+  maximum_allowed_overlap_chars: 80
+
+retrieval:
+  model_version: f5_char_ngram_tfidf_v1
+  analyzer: normalized_chinese_alphanumeric_character_ngram
+  ngram_min: 2
+  ngram_max: 4
+  term_frequency: one_plus_natural_log_count
+  inverse_document_frequency: smoothed
+  similarity: cosine
+  default_top_k: 3
+  maximum_top_k: 10
+  require_fund_code_filter: true
+  require_period_filter: true
+  external_api_calls: 0
+
+memo:
+  system_name: 可追溯文档检索与模板化投研 Memo 系统
+  maximum_cited_cards: 3
+  minimum_top_cosine_score: 0.05
+  minimum_query_ngram_coverage: 0.50
+  facts_are_exact_source_excerpts: true
+  headings:
+    - 已确认事实
+    - 原文证据
+    - 研究含义
+    - 当前无法确认的内容
+  refusal_message: 当前文档不足以回答该问题。
+  external_model_calls: 0
+
+evaluation:
+  schema_version: f7_dev_holdout_evaluation_v1
+  retrieval_top_k: 5
+  memo_maximum_cited_cards: 3
+  question_counts:
+    development: 10
+    holdout: 5
+  question_types:
+    - single_document_fact
+    - cross_quarter_change
+    - cross_fund_comparison
+    - unanswerable
+  metrics:
+    - gold_page_recall_at_5
+    - mrr_at_5
+    - citation_support_rate
+    - answer_completeness
+    - unsupported_claim_rate
+    - refusal_accuracy
+    - end_to_end_pass_count
+  holdout:
+    execution_policy: exactly_once_after_freeze
+    run_count: 1
+    rerun_forbidden: true
+    tuning_after_results_forbidden: true
+    frozen_quality_targets:
+      minimum_holdout_gold_page_recall_at_5: 0.80
+      minimum_holdout_mrr_at_5: 0.80
+      required_citation_support_rate: 1.0
+      minimum_answer_completeness: 0.80
+      required_unsupported_claim_rate: 0.0
+      required_refusal_accuracy: 1.0
+      minimum_holdout_end_to_end_pass_count: 4
+
+streamlit:
+  local_only: true
+  deployment_enabled: false
+  app: app.py
+  page_count: 2
+  pages:
+    - 基金与组合诊断
+    - 研究证据与 Memo
+  external_api_calls: 0
+  writes_user_questions_to_disk: false
+  holdout_rerun_performed: false
+
+public_demo:
+  default_profile: demo_synthetic
+  profiles:
+    - demo_synthetic
+    - sample_real
+  network_required: false
+  api_key_required: false
+  complete_pdf_in_repository: false
+  real_excerpt_maximum_chars: 110
+
+reporting:
+  build_script: scripts/build_f10_materials.py
+  default_pdf_engine: reportlab
+  latex_source_preserved: true
+  expected_pdf_pages: 12
+  expected_figure_count: 6
+  expected_table_count: 8
+  full_page_visual_qa_required: true
+  deployment_enabled: false

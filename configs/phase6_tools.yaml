@@ -1,0 +1,68 @@
+schema_version: 1
+project_id: fund_agent
+phase: PHASE_6
+random_seed: 20260804
+dataset_profile: demo_synthetic
+dataset_root: data/demo_synthetic
+old_holdout_policy: FROZEN_DO_NOT_READ
+llm_enabled: false
+network_enabled: false
+paid_api_enabled: false
+arbitrary_shell_allowed: false
+arbitrary_filesystem_allowed: false
+secret_access_allowed: false
+allowed_tools:
+  - load_fund_profile
+  - calculate_nav_metrics
+  - compare_holdings
+  - retrieve_report_evidence
+  - fetch_official_source
+  - verify_citations
+  - compare_funds
+  - build_evidence_table
+  - validate_numeric_claims
+  - export_research_memo
+allowed_fund_codes:
+  - "SYN001"
+  - "SYN002"
+  - "SYN003"
+allowed_periods:
+  - 2025Q3
+  - 2025Q4
+  - 2026Q1
+  - 2026Q2
+allowed_official_domains:
+  - example.invalid
+allowed_data_files:
+  - profile.json
+  - nav_daily.csv
+  - top10_holdings.csv
+  - chunks.jsonl
+  - tfidf_index.json
+  - source_manifest.csv
+file_sha256:
+  profile.json: d017129f6cc8d8886569ff03a5ab031a5595529faa52026cf8c04971bf6c52d9
+  nav_daily.csv: d248e9978b5ed51300f840492f8504eda1cd875939265c6fd604c0a41e36f375
+  top10_holdings.csv: 5f4b27a1cc098cf9f3eecf87740574f6ca332357a8f160107deaa42c776c86da
+  chunks.jsonl: 27b744e7e6400801676907347d0cb19c9de2c676049e0d822a20d8037cc4f974
+  tfidf_index.json: 9b9108d9497f8adbc10cc62969863a36da67901f94763b8fee434aa343324e88
+  source_manifest.csv: 25e00ef54b9a6fe81bdab41281058fbaf42c91a43ba4225852ec870c743352a1
+tool_timeouts_seconds:
+  load_fund_profile: 2.0
+  calculate_nav_metrics: 2.0
+  compare_holdings: 2.0
+  retrieve_report_evidence: 2.0
+  fetch_official_source: 2.0
+  verify_citations: 2.0
+  compare_funds: 2.0
+  build_evidence_table: 2.0
+  validate_numeric_claims: 2.0
+  export_research_memo: 2.0
+maximum_top_k: 10
+maximum_claims_per_call: 20
+export_root: results/v2_agent/phase6/exports
+audit_retention: redacted_metadata_only
+outputs:
+  root: results/v2_agent/phase6
+  report: reports/phase6_tools_report.md
+  gate_report: reports/phase6_gate_report.md

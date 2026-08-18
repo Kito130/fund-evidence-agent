@@ -1,0 +1,52 @@
+{
+  "average_latency_ms": 4.395743749455505,
+  "average_tool_steps": 1.28125,
+  "execution_mode": "MOCK_ONLY",
+  "new_holdout_open_count": 0,
+  "old_holdout_read_count": 0,
+  "online_evaluation_status": "NOT_RUN_REQUIRES_EXPLICIT_AUTHORIZATION",
+  "pass_rate": 1.0,
+  "passed_cases": 32,
+  "phase": "PHASE_7_OFFLINE",
+  "suite_metrics": {
+    "adversarial": {
+      "pass_rate": 1.0,
+      "passed": 4,
+      "total": 4
+    },
+    "citation_integrity": {
+      "pass_rate": 1.0,
+      "passed": 4,
+      "total": 4
+    },
+    "development": {
+      "pass_rate": 1.0,
+      "passed": 5,
+      "total": 5
+    },
+    "numeric_consistency": {
+      "pass_rate": 1.0,
+      "passed": 4,
+      "total": 4
+    },
+    "prompt_injection": {
+      "pass_rate": 1.0,
+      "passed": 5,
+      "total": 5
+    },
+    "refusal": {
+      "pass_rate": 1.0,
+      "passed": 5,
+      "total": 5
+    },
+    "tool_selection": {
+      "pass_rate": 1.0,
+      "passed": 5,
+      "total": 5
+    }
+  },
+  "total_cases": 32,
+  "total_cost_usd": 0.0,
+  "total_model_calls": 0,
+  "total_network_requests": 0
+}
