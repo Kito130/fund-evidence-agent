@@ -1,8 +1,5 @@
 # Frozen demo data hashes are recorded from the Windows release workspace.
 # Keep their byte representation stable on every checkout.
 data/demo_synthetic/profile.json text eol=crlf
-data/demo_synthetic/nav_daily.csv text eol=crlf
-data/demo_synthetic/top10_holdings.csv text eol=crlf
 data/demo_synthetic/chunks.jsonl text eol=crlf
 data/demo_synthetic/tfidf_index.json text eol=crlf
-data/demo_synthetic/source_manifest.csv text eol=crlf

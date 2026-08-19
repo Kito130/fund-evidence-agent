@@ -123,12 +123,7 @@ def write_jsonl(path: Path, rows: Iterable[dict[str, Any]]) -> None:
 def write_csv(path: Path, frame: pd.DataFrame) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = path.with_suffix(path.suffix + ".tmp")
-    frame.to_csv(
-        temp_path,
-        index=False,
-        encoding="utf-8",
-        lineterminator="\r\n",
-    )
+    frame.to_csv(temp_path, index=False, encoding="utf-8", lineterminator="\n")
     os.replace(temp_path, path)
 
 
