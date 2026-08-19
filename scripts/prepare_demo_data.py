@@ -84,7 +84,11 @@ MANAGER_EXCERPT_EXCLUSIONS = (
 def atomic_write_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = path.with_suffix(path.suffix + ".tmp")
-    temp_path.write_text(text, encoding="utf-8")
+    # Frozen public artifacts use CRLF so their byte hashes remain stable on
+    # Windows and Linux checkouts alike.
+    normalized = text.replace("\r\n", "\n").replace("\n", "\r\n")
+    with temp_path.open("w", encoding="utf-8", newline="") as handle:
+        handle.write(normalized)
     os.replace(temp_path, path)
 
 
@@ -119,7 +123,12 @@ def write_jsonl(path: Path, rows: Iterable[dict[str, Any]]) -> None:
 def write_csv(path: Path, frame: pd.DataFrame) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = path.with_suffix(path.suffix + ".tmp")
-    frame.to_csv(temp_path, index=False, encoding="utf-8", lineterminator="\n")
+    frame.to_csv(
+        temp_path,
+        index=False,
+        encoding="utf-8",
+        lineterminator="\r\n",
+    )
     os.replace(temp_path, path)
 
 
