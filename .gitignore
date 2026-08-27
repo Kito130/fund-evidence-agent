@@ -23,6 +23,7 @@ secrets.*
 # Public data allowlist
 data/*
 !data/README.md
+!data/DATA_MANIFEST.md
 !data/demo_synthetic/
 !data/demo_synthetic/**
 !data/sample_public/

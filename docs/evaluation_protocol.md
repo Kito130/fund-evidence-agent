@@ -9,7 +9,8 @@ prompt-injection suites. All in-scope entities are synthetic (`SYN001` through
 Each case checks response status, ordered tool route, detected fund and period
 scope, reason codes, tool-step budget, numeric validation, and citation
 validation where applicable. The run manifest records hashes of the config,
-case files, source files, Phase 6 manifest, and generated outputs.
+case files, source files, registered tool-contract manifest, and generated
+outputs.
 
 Evidence answers also require the top deterministic retrieval score to meet the
 frozen `0.31` threshold. This corpus-specific threshold rejects low-relevance

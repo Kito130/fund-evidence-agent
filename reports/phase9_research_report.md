@@ -89,4 +89,5 @@ python -m uvicorn fund_agent_v2.api:app --host 127.0.0.1 --port 8000
 
 ## 10. 证据映射
 
-简历候选数字和工程结论见 `phase9_resume_evidence_map.md`；每行都指向结果、源码、配置和数据注册哈希。正式导出仍需人工审批。
+公开工程结论及其边界见 `reports/architecture.md` 和
+`reports/evaluation.md`；机器结果保留在 `results/v2_agent/` 的合成评测产物中。

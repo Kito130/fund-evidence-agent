@@ -2,8 +2,8 @@
 
 ## Protocol
 
-The public V2 evaluation is deterministic and uses only the registered
-synthetic dataset. It contains 32 fixed cases across seven named suites:
+The public evaluation is deterministic and uses only the registered synthetic
+dataset. It contains 32 fixed cases across seven named suites:
 
 | Suite | Cases | Contract focus |
 | --- | ---: | --- |
@@ -56,6 +56,6 @@ The public pipeline is the smaller end-to-end path:
 python scripts/run_pipeline.py --profile demo_synthetic
 ```
 
-Historical Phase 6/7/9 files remain as evidence artifacts only. The public
-navigation is this document, [architecture.md](architecture.md), and the
-runtime contract in [../docs/agent_runtime.md](../docs/agent_runtime.md).
+Generated build records retain their original compatibility filenames. Public
+navigation starts with this document, [architecture.md](architecture.md), and
+the runtime contract in [../docs/agent_runtime.md](../docs/agent_runtime.md).

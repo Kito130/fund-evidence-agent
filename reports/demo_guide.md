@@ -36,5 +36,5 @@
 
 ## 4:40--5:00 收束
 
-打开 `reports/research_report.pdf` 和 `reports/resume_evidence_map.md`，
-展示每个简历数字如何追溯到结果表、审计 JSON、脚本、配置和数据版本。
+打开 `reports/architecture.md` 和 `reports/evaluation.md`，展示工具契约、
+评测边界和公开结论如何回指测试、配置与合成数据版本。
