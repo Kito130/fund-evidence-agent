@@ -1,74 +1,113 @@
 # Fund Evidence Agent
 
-An evidence-constrained fund research service for answering bounded questions
-about NAV paths, public top-10 holdings, and report excerpts without silently
-turning missing evidence into a claim. The repository combines the original
-deterministic fund research platform with a V2 single-Agent runtime, FastAPI
-service, health checks, metrics, and Docker packaging.
+这是一个证据约束型基金研究 Agent：它对净值和公开前十大持仓进行确定性计算，从已
+登记的报告片段中检索证据，并在引用不足、数字无法复算或请求越界时拒答。公开版本
+使用完全合成数据和确定性 `MOCK_ONLY` 路由，用于验证工程契约，不代表真实 LLM 质量。
+[中文完整说明](README.zh-CN.md)
 
-The default public path is deterministic and synthetic. It runs in `MOCK_ONLY`
-mode, makes zero model/network calls, and requires no API key. It demonstrates
-software contracts and safety controls, not real LLM quality, live fund data,
-investment advice, or production readiness.
+Fund disclosures are incomplete, heterogeneous, and easy to overinterpret.
+This project separates deterministic calculations, document evidence, and
+refusal decisions so that an answer can be traced to a registered table,
+bounded excerpt, validation result, or explicit reason for not answering.
 
-Chinese documentation: [README.zh-CN.md](README.zh-CN.md)
+## At a Glance
 
-## Research Problem
-
-Fund disclosures are heterogeneous and partial. The system therefore separates
-three questions that are often incorrectly mixed:
-
-1. What can be calculated deterministically from a registered NAV or public
-   top-10 table?
-2. Which report page and bounded excerpt support a textual answer?
-3. When the local evidence is insufficient or the request is unsafe, should the
-   system refuse before using a tool?
-
-The platform computes NAV return/volatility/drawdown, public top-10
-concentration, same-period top-10 overlap, and industry allocation changes. Its
-retrieval baseline is Chinese character 2-4 gram TF-IDF with fund and report
-period filters. The Agent runtime validates schemas, routes to an allowlisted
-tool set, checks citations and numeric claims, and refuses unsupported or unsafe
-requests.
-
-## V1 Platform and V2 Agent
-
-| Surface | What it demonstrates | Public status |
+| Surface | What is implemented | Public evidence |
 | --- | --- | --- |
-| Deterministic research platform | NAV metrics, public top-10 diagnostics, bounded TF-IDF retrieval, template Memo | synthetic fixtures included |
-| V2 single-Agent runtime | state-machine routing, strict tool schemas, evidence threshold, refusal and redacted traces | deterministic `MOCK_ONLY` |
-| Optional online adapter | OpenAI Responses API / Agents SDK contract boundary | disabled; no real API evaluation is claimed |
-| Service layer | FastAPI request IDs, health endpoints, metrics, safe degradation, Docker | local synthetic service |
+| Fund analytics | NAV return/volatility/drawdown, top-10 concentration and overlap, industry changes | Three synthetic funds across four report periods |
+| Retrieval | Chinese character 2-4 gram TF-IDF with fund, period, score, page, and hash checks | Registered synthetic chunks and deterministic index |
+| Agent runtime | Intent routing, ten allowlisted tools, strict schemas, numeric/citation validation, refusal | 32 fixed offline cases across seven suites |
+| Service | FastAPI, request IDs, health/readiness, metrics, safe degradation | Local Docker service bound to loopback |
 
-The public demo uses `SYN001`, `SYN002`, and `SYN003` across four synthetic
-report periods. Real fund files and complete PDFs are excluded. See
-[DATA_LICENSE.md](DATA_LICENSE.md) and [data/DATA_MANIFEST.md](data/DATA_MANIFEST.md).
+## Research Boundary
 
-## Architecture
+The default public runtime uses only `SYN001`, `SYN002`, and `SYN003` with
+invented NAV, holdings, report text, hashes, and `.invalid` URLs. It makes zero
+model calls and zero network requests and requires no API key. This baseline
+tests tool and evidence contracts; it does not establish real-model reasoning,
+semantic retrieval quality, live fund facts, investment advice, or production
+readiness. Data classifications are listed in
+[data/DATA_MANIFEST.md](data/DATA_MANIFEST.md).
+
+## System Design
 
 ```text
-synthetic registered files
+registered synthetic files
         |
-        +--> deterministic metrics and public-holdings diagnostics
+        +--> deterministic fund metrics
         |
-        +--> scoped TF-IDF retrieval --> evidence/citation validation
+        +--> scoped TF-IDF retrieval --> page, chunk, and hash validation
                                       |
                                       v
-                         bounded single-Agent state machine
+                         bounded Agent state machine
                                       |
                          ANSWERED / REFUSED / DEGRADED
                                       |
-                    FastAPI + request ID + redacted audit metrics
+                       FastAPI + redacted audit metrics
 ```
 
-The runtime has ten allowlisted tools, a six-step maximum per request, strict
-Pydantic schemas, registered-file hash checks, numeric re-computation, and a
-corpus-specific minimum retrieval score of `0.31`. The score is a lexical
-relevance gate, not a semantic-confidence probability.
+The runtime permits at most six tool steps. Before tool execution, it rejects
+personalized investment advice, return guarantees, fabricated evidence,
+secret/file/command requests, prompt injection, and tool-budget abuse. Numeric
+claims are recalculated from registered CSV files. Evidence answers must pass
+scope, retrieval-score, page, chunk, and source-hash checks. Redacted traces
+retain request IDs, tool names, status, duration, and hashes while omitting the
+query, answer, and evidence text.
 
-## Quick Start
+The retrieval threshold `0.31` is a corpus-specific lexical relevance gate,
+not a calibrated confidence probability. Public top-10 metrics describe only
+the disclosed rows and never stand in for complete portfolio exposure.
 
-### Local synthetic demo
+Detailed design: [reports/architecture.md](reports/architecture.md). Runtime
+contract: [docs/agent_runtime.md](docs/agent_runtime.md).
+
+## Verified API Example
+
+Request to `POST /v1/research`:
+
+```json
+{"query":"请计算SYN001的净值指标。"}
+```
+
+Bounded response fields:
+
+```json
+{
+  "status": "ANSWERED",
+  "answer": "SYN001 累计收益 0.094260，年化波动 0.061029，最大回撤 -0.066125",
+  "reason_codes": ["NUMERICALLY_VERIFIED"],
+  "usage": {
+    "model_calls": 0,
+    "network_requests": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "estimated_cost_usd": 0.0
+  }
+}
+```
+
+Unsupported or unsafe requests return `REFUSED` with machine-readable reason
+codes instead of an unsupported narrative.
+
+## Offline Evaluation
+
+| Suite | Cases | Focus |
+| --- | ---: | --- |
+| adversarial | 4 | out-of-scope and hostile requests |
+| citation integrity | 4 | page, chunk, hash, and scope validation |
+| development | 5 | expected answer routes and schemas |
+| numeric consistency | 4 | recalculation of numeric claims |
+| prompt injection | 5 | blocking before tool execution |
+| refusal | 5 | evidence and policy boundaries |
+| tool selection | 5 | ordered allowlisted tool routes |
+| **Total** | **32** | **32/32 on this deterministic corpus** |
+
+The run records zero model calls, network requests, tokens, and API cost. It
+also records zero reads of the old holdout and does not create a new final
+holdout. These results validate the listed software controls only; see
+[reports/evaluation.md](reports/evaluation.md) for the exact interpretation.
+
+## Run Locally
 
 ```powershell
 python -m pip install -e ".[dev]"
@@ -76,82 +115,55 @@ python scripts/run_pipeline.py --profile demo_synthetic
 python -m pytest -q
 ```
 
-The pipeline prints `network_calls=0` and `api_keys_required=0`, then exercises
-one answer case and one evidence-refusal case. The test suite also checks that
-the real-sample directory and old holdout artifacts are absent.
+The pipeline checks one supported answer and one evidence refusal, printing
+`network_calls=0` and `api_keys_required=0`.
 
-### FastAPI service
+Start the API:
 
 ```powershell
 $env:FUND_AGENT_MODE = "MOCK_ONLY"
 python -m uvicorn fund_agent_v2.api:app --app-dir src --host 127.0.0.1 --port 8000
 ```
 
-Useful endpoints are `/health/live`, `/health/ready`, `/metrics`, and
-`POST /v1/research` with a JSON body such as `{"query":"SYN001 NAV"}`. The
-service rejects online-mode headers and remains local-only by default.
+Endpoints: `/health/live`, `/health/ready`, `/metrics`, and
+`POST /v1/research`.
 
-### Docker
+Run the containerized service:
 
 ```powershell
-docker compose up --build
+docker compose up --build --wait
+python scripts/run_container_smoke.py
+docker compose down
 ```
 
-The compose file mounts only `data/demo_synthetic` read-only, drops Linux
-capabilities, uses a non-root user, and exposes the service on loopback. Docker
-is a local research demonstration, not a hosted investment-advice service.
+The container uses a non-root user, a read-only filesystem and synthetic-data
+mount, dropped Linux capabilities, and a loopback host binding.
 
-## Offline Evaluation
-
-The V2 offline evaluation contains 32 fixed cases in seven named suites:
-adversarial (4), citation integrity (4), development (5), numeric consistency
-(4), prompt injection (5), refusal (5), and tool selection (5). The aggregate
-result is 32/32 for this exact deterministic corpus. It checks routes, schemas,
-scope, citation integrity, numeric validation, refusal, prompt-injection
-blocking, and audit outputs.
-
-The evaluation records zero model calls, zero network requests, zero tokens, and
-USD 0.00 cost. Therefore it does not validate real LLM reasoning, language
-quality, semantic retrieval, generalization, or production performance. See
-[reports/evaluation.md](reports/evaluation.md) and
-[docs/evaluation_protocol.md](docs/evaluation_protocol.md).
-
-## Scope and Limitations
-
-- Synthetic codes, NAV, holdings, report text, hashes, and `.invalid` URLs are
-  invented and do not represent real funds or performance.
-- Public top-10 metrics are not complete portfolio holdings and cannot establish
-  full exposure or overlap.
-- TF-IDF is lexical retrieval, not semantic RAG; the `0.31` threshold is
-  corpus-specific and not a probability.
-- The fixed offline corpus is small and deterministic. Passing it is not a claim
-  of arbitrary-question robustness.
-- The optional OpenAI adapter is disabled by default and has not been evaluated
-  as real LLM quality in this public release.
-- The service does not provide live prices, real-time risk, trading signals,
-  return forecasts, or investment advice.
-
-Detailed design: [reports/architecture.md](reports/architecture.md). Detailed
-evaluation: [reports/evaluation.md](reports/evaluation.md). Data rights:
-[DATA_LICENSE.md](DATA_LICENSE.md).
-
-## Repository Map
+## Repository Guide
 
 ```text
-src/                 deterministic platform and fund_agent_v2 runtime
-configs/             runtime, tool, and evaluation configuration
+src/                 deterministic analytics and Agent runtime
+configs/             runtime, tool, and evaluation contracts
 data/demo_synthetic/ reproducible synthetic registry and tables
-eval/v2/             fixed offline evaluation cases
-tests/               public contracts and runtime tests
-scripts/             data preparation, evaluation, and service smoke entry points
-reports/             public architecture, evaluation, limits, and historical evidence
-compose.yaml         loopback Docker service
+eval/                 fixed deterministic evaluation cases
+tests/                analytics, safety, API, and runtime contracts
+scripts/              preparation, evaluation, and service entry points
+reports/              architecture, evaluation, limitations, and demo guide
+compose.yaml          local loopback service definition
 ```
 
-## License and Contributions
+## Limits
 
-Original source code is released under [MIT License](LICENSE). MIT does not
-license fund-company reports, market data, provider responses, excerpts,
-trademarks, or other third-party material. See [DATA_LICENSE.md](DATA_LICENSE.md).
+- Character n-gram TF-IDF is lexical retrieval, not semantic RAG.
+- The small fixed corpus does not establish arbitrary-question generalization.
+- Public top-10 holdings cannot reveal complete exposures or portfolio overlap.
+- The optional online adapter is disabled and has not undergone a real LLM
+  quality evaluation in this public release.
+- The service provides no live data, forecasts, trading signals, personalized
+  advice, or hosted deployment.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
+Data rights: [DATA_LICENSE.md](DATA_LICENSE.md). Detailed limitations:
+[reports/limitations.md](reports/limitations.md). Original source code is
+released under the [MIT License](LICENSE); that license does not cover fund
+documents, market data, provider responses, or trademarks. See
+[CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).

@@ -36,6 +36,6 @@ fact or historical performance.
 The service does not provide real-time risk, complete holdings, trading signals,
 backtests, return forecasts, or investment advice. Official-source retrieval in
 the public demo is a local manifest lookup over `.invalid` URLs, not live web
-scraping. Historical phase reports in this directory are evidence artifacts and
-may describe private or excluded work; the public claims are defined by the
-current README and `reports/architecture.md`/`reports/evaluation.md`.
+scraping. Compatibility records in this directory may describe private or
+excluded work; public claims are defined by the current README,
+`reports/architecture.md`, and `reports/evaluation.md`.

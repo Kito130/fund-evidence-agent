@@ -41,7 +41,7 @@ def main() -> int:
     research_status, research = request_json(
         "POST",
         "/v1/research",
-        payload={"query": "002980的净值指标是什么？"},
+        payload={"query": "请计算SYN001的净值指标。"},
         headers={"X-Request-ID": "container-smoke-001"},
     )
     online_status, online = request_json(
